@@ -25,7 +25,7 @@ body {
     justify-content: center;
 }
 
-/* 환공포증 유발하던 패턴 제거 후 은은한 빛 효과 추가 */
+/* 은은한 빛 효과 추가 */
 .stars-bg {
     position: fixed;
     top: 0;
