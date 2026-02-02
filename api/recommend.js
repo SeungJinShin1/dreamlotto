@@ -1,71 +1,100 @@
 /**
  * Backend: Vercel Serverless Function
- * Dependency: None (Uses native fetch in Node.js 18+)
+ * Model: Gemini 2.5 Flash (2026 Standard)
+ * Features: Exponential Backoff, Native Fetch, JSON Mode
  */
 
 export default async function handler(req, res) {
-    // Only allow POST requests
     if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
+      return res.status(405).json({ error: 'Method Not Allowed.' });
     }
   
     const { dream } = req.body;
-  
     if (!dream) {
-      return res.status(400).json({ error: 'Dream description is required.' });
+      return res.status(400).json({ error: '꿈 내용을 입력해주세요.' });
     }
   
-    const apiKey = process.env.GEMINI_API_KEY;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const apiKey = process.env.GEMINI_API_KEY || "";
+    // Gemini 2.5 Flash Preview Endpoint (2026 Standard)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
   
-    const systemInstruction = `
-      너는 신비로운 꿈 해몽가야. 사용자가 입력한 꿈 내용을 바탕으로 다음을 수행해:
-      1. 긍정적이고 희망적인 해몽을 3문장 이내로 작성해.
-      2. 연관된 로또 번호 6개(1~45 사이, 중복 없음)를 추천해.
-      3. 행운의 아이템과 행운의 색상을 각각 하나씩 정해줘.
-      
-      반드시 아래의 JSON 형식으로만 응답해:
-      {
-        "interpretation": "해몽 텍스트",
-        "lucky_numbers": [1, 2, 3, 4, 5, 6],
-        "lucky_item": "아이템 이름",
-        "lucky_color": "색상 이름"
+    const systemPrompt = `너는 신비로운 꿈 해몽가야. 긍정적인 해몽과 로또 번호 6개, 행운의 아이템, 행운의 색상을 추천해줘.`;
+    
+    const payload = {
+      contents: [{ 
+        parts: [{ 
+          text: `사용자의 꿈: ${dream}\n위 내용을 바탕으로 해몽과 로또 번호를 추천해줘.` 
+        }] 
+      }],
+      systemInstruction: { 
+        parts: [{ text: systemPrompt }] 
+      },
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            interpretation: { type: "STRING" },
+            lucky_numbers: { 
+              type: "ARRAY", 
+              items: { type: "NUMBER" },
+              minItems: 6,
+              maxItems: 6
+            },
+            lucky_item: { type: "STRING" },
+            lucky_color: { type: "STRING" }
+          },
+          required: ["interpretation", "lucky_numbers", "lucky_item", "lucky_color"]
+        }
       }
-    `;
+    };
+  
+    // Exponential Backoff Implementation (Up to 5 retries)
+    const fetchWithRetry = async (url, options, maxRetries = 5) => {
+      for (let i = 0; i < maxRetries; i++) {
+        try {
+          const response = await fetch(url, options);
+          if (response.ok) return response;
+          
+          // Only retry on rate limits or server errors
+          if (response.status !== 429 && response.status < 500) {
+            return response;
+          }
+        } catch (err) {
+          if (i === maxRetries - 1) throw err;
+        }
+        const delay = Math.pow(2, i) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+      return fetch(url, options);
+    };
   
     try {
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                { text: `System: ${systemInstruction}\nUser: ${dream}` }
-              ]
-            }
-          ],
-          generationConfig: {
-              responseMimeType: "application/json"
-          }
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
   
-      const data = await response.json();
-      
+      const result = await response.json();
+  
       if (!response.ok) {
-        throw new Error(data.error?.message || 'Failed to fetch from Gemini');
+        throw new Error(result.error?.message || 'API 호출 실패');
       }
   
-      // Extract the JSON string from Gemini's response
-      const resultText = data.candidates[0].content.parts[0].text;
-      const resultJson = JSON.parse(resultText);
+      const content = result.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!content) {
+        throw new Error('응답 데이터 형식이 올바르지 않습니다.');
+      }
   
-      return res.status(200).json(resultJson);
+      const finalData = JSON.parse(content);
+      return res.status(200).json(finalData);
+  
     } catch (error) {
       console.error('API Error:', error);
-      return res.status(500).json({ error: '신비로운 기운이 일시적으로 차단되었습니다. 잠시 후 다시 시도해주세요.' });
+      return res.status(500).json({ 
+        error: '신비로운 기운을 읽는 도중 오류가 발생했습니다.',
+        details: error.message 
+      });
     }
   }
