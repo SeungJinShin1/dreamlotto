@@ -1,0 +1,15 @@
+# Firebase
+firebase-debug.log
+
+# dotenv environment variables file
+.env
+
+# Node
+.DS_Store
+node_modules
+
+# IDX
+.idx
+
+# VSCode
+.vscode

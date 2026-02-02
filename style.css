@@ -1,1 +1,238 @@
-/* Add styles here */
+:root {
+    --primary-bg: #4A148C;
+    --secondary-bg: #1A237E;
+    --accent-gold: #FFD700;
+    --text-white: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+    color: var(--text-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.stars-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(white, rgba(255,255,255,0.2) 2px, transparent 40px);
+    background-size: 50px 50px;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    color: var(--accent-gold);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.ads-box {
+    width: 100%;
+    min-height: 100px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.ads-label {
+    font-size: 0.6rem;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    opacity: 0.5;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: white;
+    padding: 15px;
+    margin: 15px 0;
+    font-family: inherit;
+    resize: none;
+    font-size: 1rem;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #FFD700, #FFA000);
+    color: #4A148C;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+.hidden { display: none; }
+
+#loading-section {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 215, 0, 0.1);
+    border-top: 4px solid var(--accent-gold);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.result-card {
+    margin-bottom: 25px;
+}
+
+.result-card h3 {
+    font-size: 1rem;
+    color: var(--accent-gold);
+    margin-bottom: 12px;
+}
+
+#interpretation-text {
+    line-height: 1.6;
+    font-size: 0.95rem;
+    word-break: keep-all;
+}
+
+.balls-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.ball {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    box-shadow: inset -3px -3px 6px rgba(0,0,0,0.3), 3px 3px 6px rgba(0,0,0,0.2);
+    animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 로또 번호대별 색상 */
+.ball.y1 { background: radial-gradient(circle at 30% 30%, #fbc02d, #f9a825); } /* 1-10 */
+.ball.y11 { background: radial-gradient(circle at 30% 30%, #1e88e5, #1565c0); } /* 11-20 */
+.ball.y21 { background: radial-gradient(circle at 30% 30%, #e53935, #c62828); } /* 21-30 */
+.ball.y31 { background: radial-gradient(circle at 30% 30%, #757575, #424242); } /* 31-40 */
+.ball.y41 { background: radial-gradient(circle at 30% 30%, #43a047, #2e7d32); } /* 41-45 */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.info-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.info-item .label {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-bottom: 5px;
+}
+
+.info-item .value {
+    font-weight: bold;
+    font-size: 1rem;
+    color: var(--accent-gold);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+#retry-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    margin-top: 10px;
+}
+
+@media (max-width: 400px) {
+    .ball { width: 35px; height: 35px; font-size: 1rem; }
+}
