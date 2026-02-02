@@ -244,7 +244,31 @@ button:active {
 
 footer {
     text-align: center;
-    padding: 30px;
+    padding: 30px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    font-size: 0.8rem;
+}
+
+.footer-links a {
+    color: var(--text-white);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.footer-links a:hover { opacity: 1; }
+
+.divider { opacity: 0.2; }
+
+.copyright {
     font-size: 0.75rem;
     opacity: 0.4;
 }
