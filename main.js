@@ -2,6 +2,7 @@
  * Frontend: Client-side Logic
  */
 
+// 1. DOM Elements Selection
 const inputSection = document.getElementById('input-section');
 const loadingSection = document.getElementById('loading-section');
 const resultSection = document.getElementById('result-section');
@@ -9,6 +10,12 @@ const dreamInput = document.getElementById('dream-input');
 const submitBtn = document.getElementById('submit-btn');
 const retryBtn = document.getElementById('retry-btn');
 
+// 2. Result Step Elements (Fixed Definitions)
+const stepInterpretation = document.getElementById('step-interpretation');
+const stepNumbers = document.getElementById('step-numbers');
+const stepItems = document.getElementById('step-items');
+
+// 3. Data Display Elements
 const interpretationText = document.getElementById('interpretation-text');
 const lottoBalls = document.getElementById('lotto-balls');
 const luckyItem = document.getElementById('lucky-item');
@@ -19,7 +26,6 @@ const infoSection = document.querySelector('.info-content-section');
 
 submitBtn.addEventListener('click', async () => {
     const dream = dreamInput.value.trim();
-    
     if (dream.length < 5) {
         alert('꿈의 내용을 조금 더 자세히 적어주세요 (5자 이상).');
         return;
@@ -59,6 +65,25 @@ retryBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+/**
+ * Reset all UI elements to initial state
+ */
+function resetUI() {
+    inputSection.classList.remove('hidden');
+    loadingSection.classList.add('hidden');
+    resultSection.classList.add('hidden');
+    dreamInput.value = '';
+    
+    // Hide all step cards for next run
+    if (stepInterpretation) stepInterpretation.classList.remove('show');
+    if (stepNumbers) stepNumbers.classList.remove('show');
+    if (stepItems) stepItems.classList.remove('show');
+    if (retryBtn) retryBtn.classList.remove('show');
+}
+
+/**
+ * Fill data and reset reveal classes before showing result
+ */
 function prepareResult(data) {
     // 텍스트 및 기본 데이터 채우기
     interpretationText.innerText = data.interpretation;
