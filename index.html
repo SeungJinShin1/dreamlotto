@@ -33,30 +33,34 @@
             <!-- Google AdSense Code Here -->
         </div>
 
-        <main class="card glass">
+        <!-- Main App Card -->
+        <main class="card glass main-app">
+            <!-- STEP 1: Input -->
             <div id="input-section">
                 <label for="dream-input">어떤 꿈을 꾸셨나요?</label>
                 <textarea id="dream-input" placeholder="꿈의 내용을 자세히 적을수록 정확한 번호가 나옵니다..."></textarea>
                 <button id="submit-btn">꿈해몽 풀이하기</button>
             </div>
 
+            <!-- STEP 2: Loading -->
             <div id="loading-section" class="hidden">
                 <div class="spinner"></div>
                 <p>당신의 꿈해몽을 풀이하고 있습니다...</p>
             </div>
 
+            <!-- STEP 3: Results (Step-by-Step Reveal via JS) -->
             <div id="result-section" class="hidden">
-                <div class="result-card">
+                <div id="step-interpretation" class="result-card reveal-item">
                     <h3>[ 꿈 해몽 ]</h3>
                     <p id="interpretation-text"></p>
                 </div>
 
-                <div class="result-card">
+                <div id="step-numbers" class="result-card reveal-item">
                     <h3>[ 행운의 번호 ]</h3>
                     <div id="lotto-balls" class="balls-container"></div>
                 </div>
 
-                <div class="info-grid">
+                <div id="step-items" class="info-grid reveal-item">
                     <div class="info-item">
                         <span class="label">🍀 행운의 아이템</span>
                         <span id="lucky-item" class="value"></span>
@@ -67,14 +71,9 @@
                     </div>
                 </div>
 
-                <button id="retry-btn">다시 점치기</button>
+                <button id="retry-btn" class="reveal-item">다시 점치기</button>
             </div>
         </main>
-
-        <!-- Middle Ad Slot -->
-        <div class="ads-box mid-ads">
-            <span class="ads-label">ADVERTISEMENT</span>
-        </div>
 
         <!-- New: Informational Content Section (For AdSense Approval) -->
         <article class="info-content-section">
@@ -121,7 +120,7 @@
               <span class="divider">|</span>
               <a href="#" id="open-terms">이용약관</a>
           </div>
-          <p class="copyright">&copy; 2026 Dream Lotto AI. All rights reserved.</p>
+          <p class="copyright">&copy; 2026 Dream Lotto @ All rights reserved.</p>
       </footer>
     </div>
 

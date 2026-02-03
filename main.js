@@ -37,12 +37,16 @@ submitBtn.addEventListener('click', async () => {
             body: JSON.stringify({ dream })
         });
 
-        if (!response.ok) {
-            throw new Error('운명 데이터를 가져오는 데 실패했습니다.');
-        }
-
         const data = await response.json();
-        renderResult(data);
+        if (!response.ok) throw new Error(data.error || '운명 데이터를 가져오지 못했습니다.');
+
+        // 단계 2: 데이터 수신 후 결과 렌더링 준비
+        prepareResult(data);
+        
+        // 단계 3: 로딩 숨기고 순차적 노출 시작
+        loadingSection.classList.add('hidden');
+        resultSection.classList.remove('hidden');
+        revealSteps();
 
     } catch (error) {
         alert(error.message);
@@ -50,31 +54,50 @@ submitBtn.addEventListener('click', async () => {
     }
 });
 
-retryBtn.addEventListener('click', resetUI);
+retryBtn.addEventListener('click', () => {
+    resetUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
-function renderResult(data) {
-    loadingSection.classList.add('hidden');
-    resultSection.classList.remove('hidden');
-
-    // Interpretation
+function prepareResult(data) {
+    // 텍스트 및 기본 데이터 채우기
     interpretationText.innerText = data.interpretation;
+    luckyItem.innerText = data.lucky_item;
+    luckyColor.innerText = data.lucky_color;
 
-    // Lotto Balls
+    // 로또 공 생성 (애니메이션 초기화를 위해 비움)
     lottoBalls.innerHTML = '';
     data.lucky_numbers.sort((a, b) => a - b).forEach((num, index) => {
         const ball = document.createElement('div');
         ball.className = `ball ${getBallColorClass(num)}`;
         ball.innerText = num;
-        ball.style.animation = `bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both ${index * 0.1}s`;
+        ball.style.animationDelay = `${index * 0.1}s`;
         lottoBalls.appendChild(ball);
     });
 
-    // Luck info
-    luckyItem.innerText = data.lucky_item;
-    luckyColor.innerText = data.lucky_color;
+    // 모든 결과 스텝의 show 클래스 제거 (초기화)
+    [stepInterpretation, stepNumbers, stepItems, retryBtn].forEach(el => {
+        el.classList.remove('show');
+    });
+}
 
-    // Scroll to results
-    resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+/**
+ * 결과를 단계별로 보여주는 핵심 로직
+ */
+async function revealSteps() {
+    const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+    await delay(100);
+    stepInterpretation.classList.add('show');
+    
+    await delay(800);
+    stepNumbers.classList.add('show');
+    
+    await delay(1200);
+    stepItems.classList.add('show');
+    
+    await delay(800);
+    retryBtn.classList.add('show');
 }
 
 function getBallColorClass(num) {
@@ -91,30 +114,3 @@ function resetUI() {
     resultSection.classList.add('hidden');
     dreamInput.value = '';
 }
-
-// Modal & Legal Documents Logic
-const modalOverlay = document.getElementById('modal-overlay');
-const modalTitle = document.getElementById('modal-title');
-const modalBody = document.getElementById('modal-body');
-const closeModal = document.getElementById('close-modal');
-
-const docs = {
-    privacy: `<h4>개인정보 처리방침</h4><p>1. 수집항목: 입력된 꿈 텍스트<br>2. 수집목적: AI 분석 결과 제공<br>3. 보관기간: 분석 즉시 파기(별도 저장 안 함)</p>`,
-    terms: `<h4>이용약관</h4><p>본 서비스는 재미 목적으로 제공되며, 생성된 로또 번호의 당첨을 보장하지 않습니다. 도박 중독에 주의하시기 바랍니다.</p>`
-};
-
-document.getElementById('open-privacy').onclick = (e) => {
-    e.preventDefault();
-    modalTitle.innerText = "개인정보처리방침";
-    modalBody.innerHTML = docs.privacy;
-    modalOverlay.classList.remove('hidden');
-};
-
-document.getElementById('open-terms').onclick = (e) => {
-    e.preventDefault();
-    modalTitle.innerText = "이용약관";
-    modalBody.innerHTML = docs.terms;
-    modalOverlay.classList.remove('hidden');
-};
-
-closeModal.onclick = () => modalOverlay.classList.add('hidden');
