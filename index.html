@@ -27,11 +27,11 @@
             <p class="subtitle">어젯밤 꿈이 당신에게 주는 행운의 메시지</p>
         </header>
 
-        <!-- 상단 광고 영역 
+        <!-- Top Ad Slot -->
         <div class="ads-box top-ads">
             <span class="ads-label">ADVERTISEMENT</span>
-            
-        </div>-->
+            <!-- Google AdSense Code Here -->
+        </div>
 
         <main class="card glass">
             <div id="input-section">
@@ -42,7 +42,7 @@
 
             <div id="loading-section" class="hidden">
                 <div class="spinner"></div>
-                <p>별들이 당신의 꿈해몽을 풀이하고 있습니다...</p>
+                <p>당신의 꿈해몽을 풀이하고 있습니다...</p>
             </div>
 
             <div id="result-section" class="hidden">
@@ -71,12 +71,50 @@
             </div>
         </main>
 
-        <!-- 하단 광고 영역 
+        <!-- Middle Ad Slot -->
+        <div class="ads-box mid-ads">
+            <span class="ads-label">ADVERTISEMENT</span>
+        </div>
+
+        <!-- New: Informational Content Section (For AdSense Approval) -->
+        <article class="info-content-section">
+            <section class="info-card glass">
+                <h2>🔮 AI 꿈해몽과 로또 번호의 신비</h2>
+                <p>꿈은 우리의 잠재의식이 보내는 강력한 신호입니다. 고대부터 인류는 꿈을 통해 미래를 예견하고 중요한 결정을 내려왔습니다. <strong>Dream Lotto AI</strong>는 수만 건의 꿈해몽 데이터와 현대적인 AI 알고리즘을 결합하여 당신의 꿈속에 숨겨진 행운의 상징을 분석합니다.</p>
+                
+                <h3>왜 AI를 통한 분석인가요?</h3>
+                <p>전통적인 해몽 방식은 고정된 키워드에 의존합니다. 하지만 "물"이라는 키워드도 맑은 물인지, 흙탕물인지, 혹은 바다인지에 따라 그 의미가 완전히 달라집니다. 저희 AI는 문맥 전체를 이해하여 가장 개인화된 해몽 결과를 도출합니다.</p>
+            </section>
+
+            <section class="info-card glass">
+                <h2>💡 행운을 부르는 꿈들</h2>
+                <ul>
+                    <li><strong>불 꿈:</strong> 재산과 명예가 크게 번창하는 길몽으로 통합니다.</li>
+                    <li><strong>조상님 꿈:</strong> 지혜로운 조언이나 큰 행운을 가져다주는 경우가 많습니다.</li>
+                    <li><strong>똥 꿈:</strong> 전통적으로 엄청난 재물을 상징하는 대표적인 로또 꿈입니다.</li>
+                    <li><strong>물 꿈:</strong> 맑은 물은 재산을, 넘치는 물은 가업의 번창을 의미합니다.</li>
+                </ul>
+            </section>
+
+            <section class="info-card glass">
+                <h2>❓ 자주 묻는 질문 (FAQ)</h2>
+                <div class="faq-item">
+                    <strong>Q. 해몽 결과가 항상 정확한가요?</strong>
+                    <p>A. 꿈해몽은 과학적 증명보다는 심리적 가이드와 재미를 목적으로 합니다. 긍정적인 메시지로 하루를 즐겁게 시작하는 도구로 활용해 주세요.</p>
+                </div>
+                <div class="faq-item">
+                    <strong>Q. 로또 번호는 어떻게 생성되나요?</strong>
+                    <p>A. 꿈의 핵심 키워드를 숫자로 변환하는 수비학적 기법과 AI의 확률 기반 연산을 결합하여 중복 없는 6개의 번호를 추천합니다.</p>
+                </div>
+            </section>
+        </article>
+
+        <!-- Bottom Ad Slot -->
         <div class="ads-box bottom-ads">
             <span class="ads-label">ADVERTISEMENT</span>
-            
-        </div> -->
-
+        </div>
+ 
+        <!-- Footer -->
         <footer>
           <div class="footer-links">
               <a href="#" id="open-privacy">개인정보처리방침</a>
@@ -85,6 +123,17 @@
           </div>
           <p class="copyright">&copy; 2026 Dream Lotto AI. All rights reserved.</p>
       </footer>
+    </div>
+
+    <!-- Modals (Privacy & Terms) -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2 id="modal-title">문서 제목</h2>
+                <button id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
     </div>
 
     <script src="main.js"></script>

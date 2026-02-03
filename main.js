@@ -14,6 +14,9 @@ const lottoBalls = document.getElementById('lotto-balls');
 const luckyItem = document.getElementById('lucky-item');
 const luckyColor = document.getElementById('lucky-color');
 
+// UI Content Section (Informational)
+const infoSection = document.querySelector('.info-content-section');
+
 submitBtn.addEventListener('click', async () => {
     const dream = dreamInput.value.trim();
     
@@ -22,8 +25,9 @@ submitBtn.addEventListener('click', async () => {
         return;
     }
 
-    // Toggle View
+    // UI state change
     inputSection.classList.add('hidden');
+    // We keep the info section visible even during loading for better content density
     loadingSection.classList.remove('hidden');
 
     try {
@@ -61,13 +65,16 @@ function renderResult(data) {
         const ball = document.createElement('div');
         ball.className = `ball ${getBallColorClass(num)}`;
         ball.innerText = num;
-        ball.style.animationDelay = `${index * 0.1}s`;
+        ball.style.animation = `bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both ${index * 0.1}s`;
         lottoBalls.appendChild(ball);
     });
 
     // Luck info
     luckyItem.innerText = data.lucky_item;
     luckyColor.innerText = data.lucky_color;
+
+    // Scroll to results
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function getBallColorClass(num) {
@@ -84,3 +91,30 @@ function resetUI() {
     resultSection.classList.add('hidden');
     dreamInput.value = '';
 }
+
+// Modal & Legal Documents Logic
+const modalOverlay = document.getElementById('modal-overlay');
+const modalTitle = document.getElementById('modal-title');
+const modalBody = document.getElementById('modal-body');
+const closeModal = document.getElementById('close-modal');
+
+const docs = {
+    privacy: `<h4>개인정보 처리방침</h4><p>1. 수집항목: 입력된 꿈 텍스트<br>2. 수집목적: AI 분석 결과 제공<br>3. 보관기간: 분석 즉시 파기(별도 저장 안 함)</p>`,
+    terms: `<h4>이용약관</h4><p>본 서비스는 재미 목적으로 제공되며, 생성된 로또 번호의 당첨을 보장하지 않습니다. 도박 중독에 주의하시기 바랍니다.</p>`
+};
+
+document.getElementById('open-privacy').onclick = (e) => {
+    e.preventDefault();
+    modalTitle.innerText = "개인정보처리방침";
+    modalBody.innerHTML = docs.privacy;
+    modalOverlay.classList.remove('hidden');
+};
+
+document.getElementById('open-terms').onclick = (e) => {
+    e.preventDefault();
+    modalTitle.innerText = "이용약관";
+    modalBody.innerHTML = docs.terms;
+    modalOverlay.classList.remove('hidden');
+};
+
+closeModal.onclick = () => modalOverlay.classList.add('hidden');
