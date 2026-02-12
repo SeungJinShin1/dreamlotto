@@ -52,7 +52,11 @@ submitBtn.addEventListener('click', async () => {
         // 단계 3: 로딩 숨기고 순차적 노출 시작
         loadingSection.classList.add('hidden');
         resultSection.classList.remove('hidden');
-        revealSteps();
+
+        // 결과가 화면에 잘 보이도록 스크롤 이동
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        await revealSteps();
 
     } catch (error) {
         alert(error.message);

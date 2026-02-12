@@ -23,11 +23,11 @@ export default async function handler(req, res) {
     const payload = {
       contents: [{ 
         parts: [{ 
-          text: `사용자의 꿈: ${dream}\n위 내용을 바탕으로 해몽과 로또 번호를 추천해줘.` 
+          text: `사용자의 꿈: ${dream}\n위 내용을 바탕으로 신비로운 해몽과 로또 번호를 추천해줘.` 
         }] 
       }],
       systemInstruction: { 
-        parts: [{ text: systemPrompt }] 
+        parts: [{ text: "너는 신비로운 꿈 해몽가야. 긍정적인 해몽(3문장), 로또 번호 6개, 행운의 아이템, 행운의 색상을 반환해." }] 
       },
       generationConfig: {
         responseMimeType: "application/json",
