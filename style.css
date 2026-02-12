@@ -73,6 +73,24 @@ header h1 {
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
 }
 
+/* Static Intro Styling */
+.static-intro {
+    padding: 25px;
+    text-align: center;
+}
+
+.static-intro h2 {
+    font-size: 1.3rem;
+    color: var(--accent-gold);
+    margin-bottom: 15px;
+}
+
+.static-intro p {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    word-break: keep-all;
+}
+
 .main-app {
     padding: 30px;
     min-height: 300px;
